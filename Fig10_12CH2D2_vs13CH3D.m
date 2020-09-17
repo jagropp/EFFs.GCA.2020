@@ -2,7 +2,8 @@
 % between 12CH2D2 and 13CH3D. We used here the equations presented in the
 % paper by Cao et al., 2019, GCA (DOI: 10.1016/J.GCA.2019.01.021), and
 % compare our calculations with the predicted EFFs are presented in the
-% paper.
+% paper. The modified equation that we used are listed in Appendix B.3 in
+% our paper.
 
 % Set number of simulations
 p = 1e5;
@@ -11,7 +12,7 @@ p = 1e5;
 [x_Cao,y_Cao,k_Cao] = Cao2019(p);
 [x,y,k]             = Cao2019_Gropp(p);
 
-% Calculate clumped isotopologue distributions for T = 0-700oC
+% Calculate equilibrium clumped isotopologue distributions for T = 0-700oC
 beta = [ 0.0307,-0.3703,1.8021,-1.4258,0.3210;
         -0.1104, 0.7348,1.1508,-2.8365,1.3194];
 Tk = (0:700)+273.15;
@@ -19,6 +20,7 @@ temp = beta(:,1).*1e12./Tk.^4 + beta(:,2).*1e9./Tk.^3 + ...
                   beta(:,3).*1e6./Tk.^2 + beta(:,4).*1e3./Tk + beta(:,5);
 eq_13CH3D  = temp(1,:);
 eq_12CH2D2 = temp(2,:);
+clear temp
 
 % Plot figure
 set(figure,'Units','Centimeters','Position',[10 2 15 12])
