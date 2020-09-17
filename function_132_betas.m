@@ -5,7 +5,7 @@
 % that the .csv file (Table_main2_beta_fit.csv) is in the same folder as
 % the function.
 
-function beta_values = calc_132_betas(Temp)
+function beta_values = function_132_betas(Temp)
 
 % INPUT
 %        Temp           - Temperature in degree Celsius
@@ -17,7 +17,7 @@ function beta_values = calc_132_betas(Temp)
 %        beta132_values - a list of temperature dependent beta for 13C-D clumps
 %        beta22_values  - a list of temperature dependent beta for D-D clumps
 
-file_name  = 'Table_main2_beta_fit.csv';
+file_name  = 'beta_fit_values.csv';
 beta_coefs   = readtable(file_name);
 
 Tc = Temp;
