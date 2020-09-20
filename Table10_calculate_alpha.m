@@ -1,18 +1,26 @@
 % Calculate the isotopic fractionations for methanogenesis and AOM, the
-% different scenarios are presented in Table 10 in the paper.
+% different scenarios are presented in Table 10 in the paper. In all the
+% calculations here we use the KIEs in the form of kL/kH, and thus a normal
+% KIE is larger then unity. For example, and KIE of -5 permil is alpha of
+% 1.05.
 
 clear
+
 % Choose temperature in oC
 Tc        = 25;
 % Generate list of beta values
-beta_vals = calc_132_betas(Tc);
+beta_vals = function_132_betas(Tc);
 % Number of simulations where relevant
 sims      = 10; 
 
 % Hydrogenotrophic methanogenesis for three scenarios
-[klna_CO2_CH4_i,klna_CO2_CH4_ii,klna_CO2_CH4_iii] = HT_MOG(beta_vals,sims);
+[klna_CO2_CH4_i,...
+ klna_CO2_CH4_ii,...
+ klna_CO2_CH4_iii] = HT_MOG(beta_vals,sims);
+
 % AOM
-klna_AOM_CH4_CH2   = AOM(beta_vals);
+klna_AOM_CH4_CO2   = AOM(beta_vals);
+
 % Acetoclastic methanogenesis
 klna_aceto_CH3_CH4 = aceto_CH3(beta_vals); % From methyl group to CH4
 klna_aceto_COO_CO2 = aceto_COO(beta_vals); % From carboxyl group to CO2
@@ -63,7 +71,8 @@ end
 kln_CO2_CH4_ii = 1000.*log(aCO2_CH4_ii);
 
 %%(iii) CAO 2019 model
-a13eq = [1.0139 1.0196 1.0341 1.0020];
+clear a13eq a13kin_f
+
 a13eq(1) = beta_vals.beta13_values(2)./beta_vals.beta13_values(10);
 a13eq(2) = beta_vals.beta13_values(10)./beta_vals.beta13_values(11);
 a13eq(3) = beta_vals.beta13_values(11)./beta_vals.beta13_values(13);
@@ -72,10 +81,10 @@ a13eq(4) = beta_vals.beta13_values(13)./beta_vals.beta13_values(4);
 a13kin_f    = ones(1,3)*1.02;
 a13kin_f(4) = 1.04;
 f      = [0 0 0 0;
-    1 0 0 0;
-    1 1 0 0;
-    1 1 1 0;
-    1 1 1 1];
+          1 0 0 0;
+          1 1 0 0;
+          1 1 1 0;
+          1 1 1 1]; % Different reversibility scenarios
 
 aCO2_CH4_iii = ones(1,5);
 for sims = 1:5
@@ -98,10 +107,10 @@ a13eq(6) = beta_vals.beta13_values(9)./beta_vals.beta13_values(8);
 a13eq(7) = beta_vals.beta13_values(8)./beta_vals.beta13_values(2);
 
 kff_aom(1)   = 1.0387;
+
 % Select the KFFs for reaction 2 to 7. In Table 11 we present results for
-% KFF of 5 and 40 permil.
-kff_aom(2:7) = ones(1,6).*1.005;
-kff_aom(2:7) = ones(1,6).*1.0408;
+% KFF of -5 and -40 permil.
+kff_aom(2:7) = ones(1,6).*1.005; % Or use 1.0048 for -50 permil.
 
 % Number of increments between 0 and 1 for the reversibility.
 p            = 50; 
