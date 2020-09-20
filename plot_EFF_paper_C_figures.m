@@ -1,27 +1,30 @@
 % 5.2.20
 % Methanogenesis EFF paper
 % Plot beta values for carbon and hydrogen isotopes
+clear
+
+set(groot,'defaultLineLineWidth',1.5)
+set(groot,'defaultAxesFontName','Helvetica')
 
 % Figures to plot
-fig(1) = 1;
+fig(1) = 1; % 13beta values
+fig(2) = 1; % 13alpha values for enzymes
+fig(3) = 1; % 13alpha values relative to CO2
+fig(4) = 1; % CO2-CH4
+fig(5) = 1; % Clumped D-D isotopologues
+fig(6) = 1; % Clumped 13C-D isotopologues
+fig(7) = 1; % Comparison of 12CH2D2
+fig(8) = 1; % Comparison of 13CH3D
 
 file_name    = 'alpha-beta.xlsx';
 betaCdat     = readtable(file_name,'Sheet',1);
-gammaCHdat   = readtable(file_name,'Sheet',6);
-gammaHHdat   = readtable(file_name,'Sheet',8);
 clumpedCHdat = readtable(file_name,'Sheet',5);
 clumpedHHdat = readtable(file_name,'Sheet',7);
 
-plot_EFF_Cfig(betaCdat,gammaCHdat,clumpedCHdat,...
-    gammaHHdat,clumpedHHdat,fig,sav)
-
-if close_val == 1; close all; end
+plot_EFF_Cfig(betaCdat,clumpedCHdat,clumpedHHdat,fig)
 
 function [] = ...
-    plot_EFF_Cfig(betCdat,gammaCHdat,clumpedCHdat,...
-    gammaHHdat,clumpedHHdat,fig,sav)
-pathstr = '/Users/jonathag/Dropbox (Weizmann Institute)/Jonathan_with_Itay/Paper 2 EFFs/Figures/';
-addpath(genpath('/Users/jonathag/Dropbox (Weizmann Institute)/Jonathan_with_Itay/Code/legendflex-pkg-master'))
+    plot_EFF_Cfig(betCdat,clumpedCHdat,clumpedHHdat,fig)
 
 figWidth     = 14;
 figHeight    = 18;
@@ -135,10 +138,6 @@ if fig(1) == 1
     grid on
     grid minor
     set(gca,'FontSize',figFontSize)
-    if sav == 1
-        print('-f1',sprintf('%s13beta',pathstr),'-dpng','-r600');
-        print('-f1',sprintf('%s13beta',pathstr),'-depsc');
-    end
 end
 %% 13ALPHA VALUES FOR ENZYMES
 if fig(2) == 1
@@ -164,22 +163,19 @@ if fig(2) == 1
     grid on
     grid minor
     set(gca,'FontSize',figFontSize)
-    if sav == 1
-        print('-f2',sprintf('%s13alpha',pathstr),'-dpng','-r600');
-        print('-f2',sprintf('%s13alpha',pathstr),'-depsc');
-    end
 end
 
 %% 13ALPHA VALUES RELATIVE TO CO2
 if fig(3) == 1
+    figure(3)
+    set(3,'Units','centimeters','Position',[10 5 figWidth figHeight])
+
     textLab2 = {'CHO-MFR [+2]','CHO-H_4MPT [+2]','CH-H_4MPT [+2]',...
         'CH_2-H_4MPT [0]','CH_3-H_4MPT [-2]','CH_3-SCoM [-2]',...
         'CH_4(g) [-4]','CH_3-OH [-2]','CH_3-COOH [-3]','CH_3-CoA [-3]'};
     alphaLoc = alpha_CO2(:,51);
     x1 = betCdat.temp_C;
     
-    figure(3)
-    set(3,'Units','centimeters','Position',[10 5 figWidth figHeight])
     for ja = 1:9
         ax1(ja) = plot(x1(1:51),1000.*log(alpha_CO2((ja),1:51)),...
             'Color',col(ja+1,:),...
@@ -202,17 +198,12 @@ if fig(3) == 1
     grid minor
     box off
     set(gca,'FontSize',figFontSize)
-    if sav == 1
-        print('-f3',sprintf('%s13alpha_co2',pathstr),'-dpng','-r600');
-        print('-f3',sprintf('%s13alpha_co2',pathstr),'-depsc');
-    end
 end
 
 %% COMPARISON OF 13ALPHA VALUES FOR CO2-CH4
 if fig(4) == 1
     figure(4)
     set(4,'Units','centimeters','Position',[10 5 figWidth figHeight])
-    x_axis = Tk-273.15;
     x_axis = 1000./Tk;
     
     h3 = plot(x_axis,1000.*log(betaC(1,:)./betaC(2,:)),'k','LineWidth',figLineWidth);
@@ -251,48 +242,12 @@ if fig(4) == 1
     set(gca,'FontSize',figFontSize')
     xlim([1 3.8])
     ylim([5 80])
-    if sav == 1
-        print('-f4',sprintf('%s13alpha_co2_ch4_comp',pathstr),'-dpng','-r600');
-        print('-f4',sprintf('%s13alpha_co2_ch4_comp',pathstr),'-depsc');
-    end
-end
-
-%% CLUMPED ISOTOPOLOGUES (13--D)
-if fig(5) == 1
-    figure(5)
-    set(5,'Units','centimeters','Position',[10 5 figWidth figHeight])
-%     Deltalab = {'CHO-MFR','CHO-H$_4$MPT','CH-H$_4$MPT','CH$_2$-H$_4$MPT',...
-%         'CH$_3$-H$_4$MPT','CH$_3$-S-CoM','CH$_4$','CH$_3$-OH','CH$_3$-COOH','CH$_3$-CSCoA'}; 
-    Deltalab = {'13CDO-MFR','13CDO-H4MPT','13CD-H4MPT','13CHD-H4MPT',...
-        '13CH2D-H4MPT','13CH2D-SCoM','13CH3D','13CH2D-OH',...
-        '13CH2D-COOH','13CH2D-CSCoA'}; 
-    for i = 1:10
-        ax(i) = plot(clumpedCHdat.T_C(1:2:51),...
-                     clumpedCHdat{1:2:51,i+1},'Color',col(i+1,:),...
-            'LineWidth',figLineWidth);
-        hold on
-        t = text(103,clumpedCHdat{51,i+1},Deltalab{i});
-        t.FontName = 'Helvetica';
-        t.FontSize = 14;
-    end
-    xlim([0 150])
-    ylim([2.7 6.7])
-    grid on
-    grid minor
-    xlabel('T (\circC)')
-    ylabel(['\Delta_i^{eq} (' char(8240) ')'])
-    set(gca,'FontSize',figFontSize)
-    box off
-    if sav == 1
-        print('-f5',sprintf('%sDelta_132',pathstr),'-dpng','-r600');
-        print('-f5',sprintf('%sDelta_132',pathstr),'-depsc');
-    end
 end
 
 %% CLUMPED ISOTOPOLOGUES (D--D)
-if fig(7) == 1
-    figure(7)
-    set(7,'Units','centimeters','Position',[10 5 figWidth figHeight])
+if fig(5) == 1
+    figure(5)
+    set(5,'Units','centimeters','Position',[10 5 figWidth figHeight])
     Delta_DD_lab = {'12CD2-H4MPT','12CHD2-H4MPT','12CHD2-SCoM',...
         '12CH2D2','12CHD2-COO','12CHD2-COSCoA','12CHD2-OH'}; 
     
@@ -313,16 +268,38 @@ if fig(7) == 1
     ylabel(['\Delta_i^{eq} (' char(8240) ')'])
     set(gca,'FontSize',figFontSize)
     box off
-    if sav == 1
-        print('-f7',sprintf('%sDelta_22',pathstr),'-dpng','-r600');
-        print('-f7',sprintf('%sDelta_22',pathstr),'-depsc');
+end
+
+%% CLUMPED ISOTOPOLOGUES (13--D)
+if fig(6) == 1
+    figure(6)
+    set(6,'Units','centimeters','Position',[10 5 figWidth figHeight])
+    Deltalab = {'13CDO-MFR','13CDO-H4MPT','13CD-H4MPT','13CHD-H4MPT',...
+        '13CH2D-H4MPT','13CH2D-SCoM','13CH3D','13CH2D-OH',...
+        '13CH2D-COOH','13CH2D-CSCoA'}; 
+    for i = 1:10
+        ax(i) = plot(clumpedCHdat.T_C(1:2:51),...
+                     clumpedCHdat{1:2:51,i+1},'Color',col(i+1,:),...
+            'LineWidth',figLineWidth);
+        hold on
+        t = text(103,clumpedCHdat{51,i+1},Deltalab{i});
+        t.FontName = 'Helvetica';
+        t.FontSize = 14;
     end
+    xlim([0 150])
+    ylim([2.7 6.7])
+    grid on
+    grid minor
+    xlabel('T (\circC)')
+    ylabel(['\Delta_i^{eq} (' char(8240) ')'])
+    set(gca,'FontSize',figFontSize)
+    box off
 end
 
 %% COMPARISON OF DELTA(12CH2D2) OF METHANE
-if fig(8) == 1
-    figure(8)
-    set(8,'Units','centimeters','Position',[10 5 figWidth figHeight])
+if fig(7) == 1
+    figure(7)
+    set(7,'Units','centimeters','Position',[10 5 figWidth figHeight])
     
     x = Tk - 273.15;
     
@@ -362,16 +339,12 @@ if fig(8) == 1
     xlim([0 700])
     set(gca,'FontSize',figFontSize)
     box off
-    if sav == 1
-%         print('-f8',sprintf('%sDelta_12CH2D2',pathstr),'-dpng','-r600');
-        print('-f8',sprintf('%sDelta_12CH2D2',pathstr),'-depsc');
-    end
 end
 
 %% COMPARISON OF DELTA(12CH3D) OF METHANE
-if fig(9) == 1
-    figure(9)
-    set(9,'Units','centimeters','Position',[10 5 figWidth figHeight])
+if fig(8) == 1
+    figure(8)
+    set(8,'Units','centimeters','Position',[10 5 figWidth figHeight])
     
     x = Tk - 273.15;
     
@@ -417,9 +390,6 @@ if fig(9) == 1
     xlim([0 700])
     set(gca,'FontSize',figFontSize)
     box off
-    if sav == 1
-        print('-f9',sprintf('%sDelta_13CH3D',pathstr),'-depsc');
-    end
 end
 
 end
