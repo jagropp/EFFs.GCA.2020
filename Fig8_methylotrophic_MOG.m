@@ -1,6 +1,6 @@
 function [] = Fig8_methylotrophic_MOG
 
-% Function to calculate isotopic fractionations in methylotrophic
+% A function to calculate isotopic fractionations in methylotrophic
 % methanogenesis and to generate Fig. 8 in Gropp et al., GCA, 2020.
 %
 % This function finds a numerical solution for steady state carbon isotope
@@ -15,12 +15,13 @@ prompt2 = 'Type number of simulations (integers only, 1 or larger): ';
 
 % Calculate equilibrium fractionation factors
 Tc        = input(prompt1);
-beta_vals = calc_132_betas(Tc);
+beta_vals = function_132_betas(Tc);
 a13eq(1)  = beta_vals.beta13_values(5)/beta_vals.beta13_values(14);
 a13eq(2)  = beta_vals.beta13_values(14)/beta_vals.beta13_values(4);
 a13eq(3)  = beta_vals.beta13_values(14)/beta_vals.beta13_values(2);
 
-sims      = round(input(prompt2)); % Number of simulations, preferably larger than 500
+sims = round(input(prompt2)); % Number of simulations, preferably 
+                              % larger than 500
 if sims < 1
     sims = 1;
 end
@@ -30,7 +31,8 @@ min_f     = -3;   % log10 of the minimal reversibility for reactions 1 and 2
 max_f     = 0;    % log10 of the maximal reversibility for reactions 1 and 2
 phi_net   = 1e-7; % Net rate (arbitrary and unitless)
 R_A       = 1e-6; % Initial isotopic composition of compound A (arbitrary)
-Rred_ox   = [0.95 0.75 0.5]; % i.e., 20:1, 3:1 and 1:1
+% Set a vector of 3 Reduction/Oxidation values. Any values between 0 and 1.
+Rred_ox   = [0.952381 0.75 0.5]; % i.e., 20:1, 3:1 and 1:1
 
 a13kf  = zeros(sims,3);   % Forward KFFs
 a13kr  = zeros(sims,3);   % Backward KFFs
@@ -55,9 +57,9 @@ for i = 1:sims
         C = [1 1 1].*1e-6';
         options = odeset('NonNegative',1:3,'RelTol',1e-1,'AbsTol',1e-9);
         [~,C] = ode15s(@frac_hydr_ODE,[0 1e10],C,options,jf,jr,a13kf(i,:),a13kr(i,:),R_A,Rred_ox(j));
-        R_B(i,j) = C(end,1);
-        R_C(i,j) = C(end,2);
-        R_D(i,j) = C(end,3);
+        R_B(i,j) = C(end,1); % CH3-SCoM
+        R_C(i,j) = C(end,2); % CH4
+        R_D(i,j) = C(end,3); % CO2
         kln13a(1,i,j) = 1000*log(R_A./R_C(i,j));
         kln13a(2,i,j) = 1000*log(R_A./R_D(i,j));
     end
@@ -71,7 +73,9 @@ end
 
 xlabel_values = {['1000ln^{13}\alpha_{CH_3OH' char(8211) 'CH_4} (' char(8240) ')'],...
                 ['1000ln^{13}\alpha_{CH_3OH' char(8211) 'CO_2} (' char(8240) ')']};
-title_values = {'20:1','3:1','1:1'};
+title_values = {sprintf('%g:1',1./(1-Rred_ox(1))-1),...
+                sprintf('%g:1',1./(1-Rred_ox(2))-1),...
+                sprintf('%g:1',1./(1-Rred_ox(3))-1)};
 figure(1)
 set(1,'Units','Centimeters','position',[10 2 22 10])
 
@@ -104,7 +108,7 @@ for i = 1:2
         if j < 3;  set(gca,'XTick',[]); end
         set(gca,'FontSize',13,'YTick',[]);
         if i == 1 && j == 1
-            title('R_{r/o} = 20:1',...
+            title(sprintf('R_{r/o} = %g:1',1./(1-Rred_ox(1))-1),...
             'Units','normalized','Position',[0.84 0.6 0])
         else
             title(title_values{j},...
@@ -112,10 +116,6 @@ for i = 1:2
         end
     end
 end
-
-local_path = '/Users/jonathag/Dropbox (Weizmann Institute)/Apps/Overleaf/EFF paper/figures/';
-print('-f1',[local_path,'methylotrophic'],'-dpng','-r400');
-print('-f1',[local_path,'methylotrophic'],'-depsc');
 
 function ddt = frac_hydr_ODE(~,C,jf,jr,akf,akr,Ra,Rred_ox)
 % Funtion for the ODE solver
