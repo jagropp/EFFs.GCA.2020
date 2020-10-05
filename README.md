@@ -2,7 +2,7 @@
 Files associated with the paper "*Theoretical Estimates of Equilibrium Carbon and Hydrogen Isotope Effects in Microbial Methane Production and Anaerobic Oxidation of Methane*", which is under review for the journal *Geochimica et Cosmochimica Acta*, by Jonathan Gropp, Mark A. Iron and Itay Halevy. Currently, a preprint version is available at [ChemRxiv](https://chemrxiv.org/articles/preprint/Theoretical_Estimates_of_Equilibrium_Carbon_and_Hydrogen_Isotope_Effects_in_Microbial_Methane_Production_and_Anaerobic_Oxidation_of_Methane/12906035).
 
 ## Files included in this repository
-- Supplementary tables.xslx - An Excel spreadsheet with all the supplementary tables mentiones in the paper.
+- supplementary_tables.xslx - An Excel spreadsheet with all the supplementary tables mentiones in the paper.
 - alpha-beta.xlsx - An Excel spreadsheet required for the plots.
 - beta_fit_values.csv - Data for the 'function_132_betas.m'.
 - Fig10_12CH2D2_vs13CH3D.m - Calculate and plot the relation between D12CH2D2 and D13CH3D under different reveresibility scenarios.
