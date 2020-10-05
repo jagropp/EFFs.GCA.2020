@@ -7,14 +7,14 @@ set(groot,'defaultLineLineWidth',1.5)
 set(groot,'defaultAxesFontName','Helvetica')
 
 % Figures to plot
-fig(1) = 1; % 13beta values
-fig(2) = 1; % 13alpha values for enzymes
-fig(3) = 1; % 13alpha values relative to CO2
-fig(4) = 1; % CO2-CH4
-fig(5) = 1; % Clumped D-D isotopologues
-fig(6) = 1; % Clumped 13C-D isotopologues
-fig(7) = 1; % Comparison of 12CH2D2
-fig(8) = 1; % Comparison of 13CH3D
+fig(1) = 0; % 13beta values
+fig(2) = 0; % 13alpha values for enzymes
+fig(3) = 0; % 13alpha values relative to CO2
+fig(4) = 0; % CO2-CH4
+fig(5) = 0; % Clumped D-D isotopologues
+fig(6) = 0; % Clumped 13C-D isotopologues
+fig(7) = 0; % Comparison of 12CH2D2
+fig(8) = 0; % Comparison of 13CH3D
 
 file_name    = 'alpha-beta.xlsx';
 betaCdat     = readtable(file_name,'Sheet',1);
@@ -113,19 +113,19 @@ if fig(1) == 1
     for ja = 1:length(pos)
         plot(x1(1:51),betaC((pos(ja)),1:51),'Color',col(pos_col(ja),:),...
             'LineWidth',figLineWidth)
-        if pos(ja) == 4
-            t = text(x1a+0.02,betaLoc(pos(ja),1)+0.005,textLab1{ja},'Interpreter',interp);
-        elseif pos(ja) == 5
-            t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
-        elseif pos(ja) == 11
-            t = text(x1a+0.02,betaLoc(pos(ja),1)+0.006,textLab1{ja},'Interpreter',interp);
-        elseif pos(ja) == 12
-            t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
-        elseif pos(ja) == 2
-            t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
-        else
+%         if pos(ja) == 4
+%             t = text(x1a+0.02,betaLoc(pos(ja),1)+0.005,textLab1{ja},'Interpreter',interp);
+%         elseif pos(ja) == 5
+%             t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
+%         elseif pos(ja) == 11
+%             t = text(x1a+0.02,betaLoc(pos(ja),1)+0.006,textLab1{ja},'Interpreter',interp);
+%         elseif pos(ja) == 12
+%             t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
+%         elseif pos(ja) == 2
+%             t = text(x1a+0.02,betaLoc(pos(ja),1)-0.002,textLab1{ja},'Interpreter',interp);
+%         else
             t = text(x1a+0.02,betaLoc(pos(ja),1),textLab1{ja},'Interpreter',interp);
-        end
+%         end
         t.FontName = 'Helvetica';
         t.FontSize = 14;
         hold on

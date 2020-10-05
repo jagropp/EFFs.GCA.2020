@@ -8,12 +8,12 @@ set(groot,'defaultAxesFontName','Helvetica')
 file_name  = 'alpha-beta.xlsx';
 betHdat    = readtable(file_name,'Sheet',2);
 
-fig(1) = 1; % 2beta
+fig(1) = 0; % 2beta
 fig(2) = 1; % 1000ln2a
 fig(3) = 1; % 1000ln2a vs. H2O
-fig(4) = 1; % H2O(l)-H2 comparison
-fig(5) = 1; % CH4-H2 comparison
-fig(6) = 1; % CH4-H2O comparison
+fig(4) = 0; % H2O(l)-H2 comparison
+fig(5) = 0; % CH4-H2 comparison
+fig(6) = 0; % CH4-H2O comparison
 
 plot_EFF_Hfig(betHdat,fig)
 
@@ -151,7 +151,7 @@ if fig(1) == 1
     textLab1 = {'H_2O_{(g)}','CH_4_{(g)}','H_2_{(g)}','H_2O_{(l)}',...
         'CHO-MFR','CHO-H_4MPT','CH-H_4MPT','CH_2-H_4MPT',...
         'CH_3-H_4MPT','CH_3-SCoM','F_{420}H_2','HS-CoB',...
-        'CH_3-OH','CH_3-COOH','CH_3-CSCoA'};
+        'CH_3-OH','CH_3-COO^-','CH_3-CSCoA'};
     
     x = 1e3./Tk;
     pos = [1:8 10:16];
@@ -159,9 +159,9 @@ if fig(1) == 1
     for ja = 1:15
         ax1(ja) = plot(x(1:51),betaH(pos(ja),1:51),'Color',col(pos_col(ja),:));
         ax1(ja).LineWidth = figLineWidth;    
-        if ja == 3
-            ax1(ja).LineStyle = '-.';
-        end
+%         if ja == 3
+%             ax1(ja).LineStyle = '-.';
+%         end
         t = text(x(1)+0.01,betaH(pos(ja),1),textLab1{ja});
         t.FontName = 'Helvetica';
         t.FontSize = 12;
@@ -171,6 +171,7 @@ if fig(1) == 1
     xlabel('1000/T (K)')
     ylabel('^{2}\beta')
     xlim([2.7 3.9])
+    ylim([2 19])
     grid on
     grid minor
     set(gca,'FontSize',figFontSize)
@@ -199,26 +200,26 @@ if fig(2) == 1
         t.FontName = 'Helvetica';
         t.FontSize = 16;
     end
-    hold on
-    h1 = errorbar(60,16.95,42.67,'o');
-    h1.CapSize = 10;
-    h1.Color = 'k';
-    h1.MarkerFaceColor = col(7,:);
-    h1.LineWidth = 1.5;
-    h1.MarkerSize = 12;
+%     hold on
+%     h1 = errorbar(60,16.95,42.67,'o');
+%     h1.CapSize = 10;
+%     h1.Color = 'k';
+%     h1.MarkerFaceColor = col(7,:);
+%     h1.LineWidth = 1.5;
+%     h1.MarkerSize = 12;
 
     box off
     xlabel('T (\circC)')
     ylabel(['1000ln^{2}\alpha^{eq} (' char(8240) ')'])
     xlim([0 122])
-    ylim([-125 125])
+    ylim([-125 160])
     grid on
     grid minor
     set(gca,'FontSize',figFontSize)
     
-    l = legend(h1,'Scheller et al. (2013)');
-    l.Location = 'southeast';
-    l.Box = 'off';
+%     l = legend(h1,'Scheller et al. (2013)');
+%     l.Location = 'southeast';
+%     l.Box = 'off';
 end
 
 %% FIGURE 3 - 2ALPHA EFF VALUES
@@ -229,7 +230,7 @@ if fig(3) == 1
     textLab1 = {'CH_4(g)','CHO-MFR','CHO-H_4MPT',...
         'CH-H_4MPT','CH_2-H_4MPT (R)','CH_2-H_4MPT (S)',...
         'CH_3-H_4MPT','CH_3-SCoM','F_{420}H_2','HS-CoB',...
-        'CH_3-OH','CH_3-COOH','CH_3-CSCoA'};
+        'CH_3-OH','CH_3-COO^-','CH_3-CSCoA'};
     x = betHdat.T_C;
 
     pos_col = [8,2:5,5,6:7,12:13,9:11];
