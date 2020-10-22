@@ -1,5 +1,5 @@
 # Gropp et al., 2020 - Equilibrium Isotopic Fractionation in Methanogenesis and AOM
-Files associated with the paper "*Theoretical Estimates of Equilibrium Carbon and Hydrogen Isotope Effects in Microbial Methane Production and Anaerobic Oxidation of Methane*" by Jonathan Gropp, Mark A. Iron and Itay Halevy, currently in publication in the journal _Geochimica et Cosmochimica Acta_. A preprint version is available at [ChemRxiv](https://chemrxiv.org/articles/preprint/Theoretical_Estimates_of_Equilibrium_Carbon_and_Hydrogen_Isotope_Effects_in_Microbial_Methane_Production_and_Anaerobic_Oxidation_of_Methane/12906035).
+Files associated with the paper "*Theoretical Estimates of Equilibrium Carbon and Hydrogen Isotope Effects in Microbial Methane Production and Anaerobic Oxidation of Methane*" by Jonathan Gropp, Mark A. Iron and Itay Halevy, [published](https://www.sciencedirect.com/science/article/abs/pii/S0016703720306505) in the journal _Geochimica et Cosmochimica Acta_.
 
 ## Files included in this repository
 | File name | Contents |
